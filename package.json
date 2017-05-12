@@ -1,0 +1,19 @@
+{
+  "name": "image-search",
+  "version": "1.0.0",
+  "description": "Image search API",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Steven Le",
+  "license": "ISC",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "express": "^4.15.2",
+    "flickrapi": "^0.6.0",
+    "mongodb": "^2.2.26",
+    "mongoose": "^4.9.8",
+    "morgan": "^1.8.1"
+  }
+}
