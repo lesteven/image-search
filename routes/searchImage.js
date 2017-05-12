@@ -22,21 +22,30 @@ searchImages.route('/:searchTerm')
 		flickr.photos.search({
 		  text: search
 		}, function(err, result) {
-				var farmNum = result.photos.photo[0].farm;
-				var serverId = Number(result.photos.photo[0].server);
-				var id = Number(result.photos.photo[0].id);
-				var secret = result.photos.photo[0].secret;
-				var title = result.photos.photo[0].title;
+			var imgArray = [];
+			
+			for(var i in result.photos.photo){
+				var farmNum = result.photos.photo[i].farm;
+				var serverId = Number(result.photos.photo[i].server);
+				var id = Number(result.photos.photo[i].id);
+				var secret = result.photos.photo[i].secret;
+				var title = result.photos.photo[i].title;
 				var link = `https://farm${farmNum}.staticflickr.com/${serverId}/${id}_${secret}`;
-				var owner = result.photos.photo[0].owner;
+				var owner = result.photos.photo[i].owner;
 				var userLink = `https://www.flickr.com/people/${owner}`
-		  console.log(result.photos.photo.length)
-		  res.json({
-		  	'url':link +`.jpg`,
-		  	'snippet':result.photos.photo[0].title,
-		  	'thumbnail': link + `_t.jpg`,
-		  	'context': userLink
-		  })
+				var snippet = result.photos.photo[i].title
+				var img = {
+				  	'url':link +`.jpg`,
+				  	'snippet':snippet,
+				  	'thumbnail': link + `_t.jpg`,
+				  	'context': userLink
+				  }
+				imgArray.push(img);	 
+			  //console.log(result.photos.photo.length)
+			}
+
+			
+		  res.json(imgArray)
 		})
 	})
 	
