@@ -17,13 +17,20 @@ searchImages.route('/:searchTerm')
 .get(function(req,res,next){
 	var search = req.params.searchTerm;
 	var offset =req._parsedOriginalUrl.search;
-	console.log(search);
-	console.log(offset);
+	//console.log(search);
+	//console.log(checkOffset(offset));
+	var offsetNum;
+	checkOffset(offset)!== undefined? 
+		offsetNum=checkOffset(offset)
+		:offsetNum =0;
+
+	console.log(offsetNum)
 	Flickr.tokenOnly(flickrOptions,function(error,flickr){
 		flickr.photos.search({
 		  text: search
 		}, function(err, result) {
-			var imgArray = createJson(result,10);
+
+			var imgArray = createJson(result,offsetNum);
 
 			
 		  res.json(imgArray)
@@ -57,8 +64,15 @@ function createJson(result,offset){
 	return imgArray;
 }
 
-function checkOffset(){
-	var re = 
+function checkOffset(offset){
+	var re = /\?offset=/;
+	var checkNum = /\d+/g;
+	if(re.test(offset) && checkNum.test(offset)){
+		return Number(offset.match(checkNum)[0])
+	}
+	else{
+		return undefined;
+	}
 }
 
 module.exports = searchImages;
