@@ -1,10 +1,10 @@
 var express = require('express');
 var searchImages = express.Router();
-var config = require('../config.js');
+//var config = require('../config.js');
 var Flickr = require('flickrapi'),
 	flickrOptions ={
-		api_key:config.apiKey,
-		secret:config.secret
+		api_key:process.env.KEY,
+		secret:process.env.SECRET
 	};
 
 var mongoose = require('mongoose');
