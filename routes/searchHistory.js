@@ -7,9 +7,10 @@ var History = require('../models/history')
 searchHistory.route('/')
 
 .get(function(req,res,next){
-	History.find({}).
-	limit(10).
-	sort('-search-time')
+	History.find({})
+	.limit(10)
+	.sort('-search-time')
+	.select('-_id')
 	.exec(function(err,docs)
 	{
 		if(err) throw err;

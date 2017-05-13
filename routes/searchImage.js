@@ -7,7 +7,7 @@ var Flickr = require('flickrapi'),
 		secret:(process.env.SECRET||config.secret)
 	};
 
-var mongoose = require('mongoose');
+var mongoose = require('mongoose')
 var History = require('../models/history');
 
 
@@ -34,17 +34,21 @@ searchImages.route('/:searchTerm')
 		  text: search
 		}, function(err, result) {
 			History.collection.insert(searchDoc,function(err,history){
-				if(err) throw err;
-				console.log('history created',history);
-			})
-			if(offsetNum >90){
+				if(err){
+					throw err;
+					res.send("There was an error, please try again")
+					console.log('history created',history);
+				} 
+				if(offsetNum >90){
 				res.send("Offset can't be greater than 90!")
-			}
-			else{
-				var imgArray = createJson(result,offsetNum);
+				}
+				else{
+					var imgArray = createJson(result,offsetNum);
 
-			  	res.json(imgArray)
-			}
+				  	res.json(imgArray)
+				}
+			})
+
 
 		})
 	})
