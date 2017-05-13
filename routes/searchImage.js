@@ -38,7 +38,7 @@ searchImages.route('/:searchTerm')
 				console.log('history created',history);
 			})
 			if(offsetNum >90){
-				res.end("Offset can't be greater than 90!")
+				res.send("Offset can't be greater than 90!")
 			}
 			var imgArray = createJson(result,offsetNum);
 
