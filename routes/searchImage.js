@@ -3,8 +3,8 @@ var searchImages = express.Router();
 //var config = require('../config.js');
 var Flickr = require('flickrapi'),
 	flickrOptions ={
-		api_key:process.env.KEY,
-		secret:process.env.SECRET
+		api_key:(process.env.KEY ||config.apiKey),
+		secret:(process.env.SECRET||config.secret)
 	};
 
 var mongoose = require('mongoose');
@@ -40,9 +40,12 @@ searchImages.route('/:searchTerm')
 			if(offsetNum >90){
 				res.send("Offset can't be greater than 90!")
 			}
-			var imgArray = createJson(result,offsetNum);
+			else{
+				var imgArray = createJson(result,offsetNum);
 
-		  	res.json(imgArray)
+			  	res.json(imgArray)
+			}
+
 		})
 	})
 	
