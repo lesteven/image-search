@@ -34,21 +34,17 @@ searchImages.route('/:searchTerm')
 		  text: search
 		}, function(err, result) {
 			History.collection.insert(searchDoc,function(err,history){
-				if(err){
-					throw err;
-					res.send("There was an error, please try again")
-					console.log('history created',history);
-				} 
-				if(offsetNum >90){
-				res.send("Offset can't be greater than 90!")
-				}
-				else{
-					var imgArray = createJson(result,offsetNum);
-
-				  	res.json(imgArray)
-				}
+				if(err) throw err;
+				console.log('history created',history);
 			})
+			if(offsetNum >90){
+			res.send("Offset can't be greater than 90!")
+			}
+			else{
+				var imgArray = createJson(result,offsetNum);
 
+			  	res.json(imgArray)
+			}
 
 		})
 	})
