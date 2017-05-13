@@ -1,11 +1,16 @@
 var express = require('express');
 var searchImages = express.Router();
-var config = require('../config.js')
+var config = require('../config.js');
 var Flickr = require('flickrapi'),
 	flickrOptions ={
 		api_key:config.apiKey,
 		secret:config.secret
-	}
+	};
+
+var mongoose = require('mongoose');
+var History = require('../models/history');
+
+
 searchImages.route('/')
 
 .get(function(req,res,next){
@@ -18,22 +23,24 @@ searchImages.route('/:searchTerm')
 	var search = req.params.searchTerm;
 	var offset =req._parsedOriginalUrl.search;
 	//console.log(search);
-	//console.log(checkOffset(offset));
-	var offsetNum;
-	checkOffset(offset)!== undefined? 
-		offsetNum=checkOffset(offset)
-		:offsetNum =0;
-
-	console.log(offsetNum)
+	var offsetNum = checkOffset(offset)
+	//console.log(offsetNum)
+	var searchDoc = {
+		'search-term': search,
+		'search-time': new Date()
+	}
 	Flickr.tokenOnly(flickrOptions,function(error,flickr){
 		flickr.photos.search({
 		  text: search
 		}, function(err, result) {
+			History.collection.insert(searchDoc,function(err,history){
+				if(err) throw err;
+				console.log('history created',history);
+			})
 
 			var imgArray = createJson(result,offsetNum);
 
-			
-		  res.json(imgArray)
+		  	res.json(imgArray)
 		})
 	})
 	
@@ -71,7 +78,7 @@ function checkOffset(offset){
 		return Number(offset.match(checkNum)[0])
 	}
 	else{
-		return undefined;
+		return 0;
 	}
 }
 
